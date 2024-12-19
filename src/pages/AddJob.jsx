@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import useAxios from "../hooks/useAxios";
 import LoadingSpinner from "./../components/LoadingSpinner";
 import useAuth from "./../hooks/useAuth";
@@ -11,6 +12,7 @@ const AddJob = () => {
   const [startDate, setStartDate] = useState(new Date());
   const { user } = useAuth();
   const { loading, data: message, axiosInstance } = useAxios();
+  const navigate = useNavigate();
 
   // form submit handler
   const handleSubmit = async (e) => {
@@ -21,6 +23,7 @@ const AddJob = () => {
     for (const [key, value] of formData) {
       data[key] = value;
     }
+    data.deadline = startDate;
     // 2.validate price ===  min< max
     const max = parseInt(data.max_price);
     const min = parseInt(data.min_price);
@@ -31,6 +34,8 @@ const AddJob = () => {
     message && toast.success(message.message);
     // 5. form reset if is job successfully
     message && e.target.reset();
+    // 6.Navigate to my posted route
+    navigate(`/my-posted-jobs`);
   };
 
   if (loading) return <LoadingSpinner />;
