@@ -25,6 +25,8 @@ const AddJob = () => {
     }
     data.deadline = startDate;
     data.bid_count = 0;
+    data.photo = user?.photoURL;
+    data.name = user?.displayName;
     // 2.validate price ===  min< max
     const max = parseInt(data.max_price);
     const min = parseInt(data.min_price);

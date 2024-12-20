@@ -11,7 +11,7 @@ const MyPostedJobs = () => {
 
   useEffect(() => {
     const email = user.email;
-    axiosInstance("get", `/jobs/${email}`);
+    axiosInstance("get", `/jobs?email=${email}`);
   }, []);
 
   if (loading) return <LoadingSpinner />;
