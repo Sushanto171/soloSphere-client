@@ -1,9 +1,22 @@
 /* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import useAxios from "../hooks/useAxios";
 import JobCard from "./JobCard";
 
 const TabCategories = () => {
+  const { data, axiosInstance } = useAxios();
+  const [category, setCategory] = useState("Web Development");
+
+  useEffect(() => {
+    fetchingHandle(category);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
+  const fetchingHandle = async (category) => {
+    await axiosInstance("get", `/jobs?category=${category}`);
+  };
+
   return (
     <Tabs>
       <div className=" container px-6 py-10 mx-auto">
@@ -18,32 +31,44 @@ const TabCategories = () => {
         </p>
         <div className="flex items-center justify-center">
           <TabList>
-            <Tab>Web Development</Tab>
-            <Tab>Graphics Design</Tab>
-            <Tab>Digital Marketing</Tab>
+            <Tab>
+              <button onClick={() => setCategory("Web Development")}>
+                Web Development
+              </button>
+            </Tab>
+            <Tab>
+              <button onClick={() => setCategory("Graphics Design")}>
+                Graphics Design
+              </button>
+            </Tab>
+            <Tab>
+              <button onClick={() => setCategory("Digital Marketing")}>
+                Digital Marketing
+              </button>
+            </Tab>
           </TabList>
         </div>
         <TabPanel>
           <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <JobCard />
-            <JobCard />
-            <JobCard />
-            <JobCard />
+            {data?.data.map((job) => (
+              <JobCard key={job._id} job={job} />
+            ))}
           </div>
         </TabPanel>
 
         <TabPanel>
           <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <JobCard />
-            <JobCard />
+            {data?.data.map((job) => (
+              <JobCard key={job._id} job={job} />
+            ))}
           </div>
         </TabPanel>
 
         <TabPanel>
           <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <JobCard /> <JobCard />
-            <JobCard /> <JobCard />
-            <JobCard /> <JobCard />
+            {data?.data.map((job) => (
+              <JobCard key={job._id} job={job} />
+            ))}
           </div>
         </TabPanel>
       </div>

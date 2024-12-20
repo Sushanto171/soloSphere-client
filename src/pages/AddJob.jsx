@@ -24,6 +24,7 @@ const AddJob = () => {
       data[key] = value;
     }
     data.deadline = startDate;
+    data.bid_count = 0;
     // 2.validate price ===  min< max
     const max = parseInt(data.max_price);
     const min = parseInt(data.min_price);
