@@ -27,10 +27,13 @@ const JobDetails = () => {
     data.delivery_date = format(new Date(startDate), "P");
     data.status = "Pending";
     data.job_id = job._id;
+    data.email = job.email;
+    data.title = job.job_title;
+    data.category = job.category;
 
     // validate
     const deadline = compareAsc(new Date(job.deadline), new Date(startDate));
-    if (deadline === 1) return toast.error("The deadline has passed!");
+    if (deadline === -1) return toast.error("The deadline has passed!");
     if (parseInt(job.min_price) > parseInt(data.price))
       return toast.error(`The price must be at least ${job.min_price}.`);
     if (job.email === data.employer_email)

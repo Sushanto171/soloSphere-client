@@ -1,16 +1,53 @@
 import { format } from "date-fns";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import useAxios from "../hooks/useAxios";
 const JobPostedTableRow = (props) => {
-  const { job } = props || {};
+  const { job, fetchAllJobs } = props || {};
+  const { axiosInstance } = useAxios();
   const {
     job_title,
     category,
-
+    _id,
     max_price,
     min_price,
     description,
     deadline,
   } = job;
+
+  const handleDelete = (id) => {
+    axiosInstance("delete", `/job/${id}`);
+    toast.success("The job successfully deleted");
+    fetchAllJobs();
+  };
+  const modernDelete = (id) => {
+    toast((t) => (
+      <div className="flex gap-3 items-center">
+        <div>
+          <p>
+            Are you <b>sure?</b>
+          </p>
+        </div>
+        <div className="gap-2 flex">
+          <button
+            className="bg-red-400 text-white px-3 py-1 rounded-md"
+            onClick={() => {
+              toast.dismiss(t.id);
+              handleDelete(id);
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="bg-green-400 text-white px-3 py-1 rounded-md"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ));
+  };
 
   return (
     <tr>
@@ -37,7 +74,10 @@ const JobPostedTableRow = (props) => {
       <td className="px-4 py-4 text-sm text-gray-500 ">{description}</td>
       <td className="px-4 py-4 text-sm whitespace-nowrap">
         <div className="flex items-center gap-x-6">
-          <button className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none">
+          <button
+            onClick={() => modernDelete(_id)}
+            className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -55,7 +95,7 @@ const JobPostedTableRow = (props) => {
           </button>
 
           <Link
-            to={`/update/1`}
+            to={`/update/${_id}`}
             className="text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none"
           >
             <svg

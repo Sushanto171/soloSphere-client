@@ -10,10 +10,12 @@ const MyPostedJobs = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+    fetchAllJobs();
+  }, []);
+  const fetchAllJobs = () => {
     const email = user.email;
     axiosInstance("get", `/jobs?email=${email}`);
-  }, []);
-
+  };
   if (loading) return <LoadingSpinner />;
   return (
     <section className="container px-4 mx-auto pt-12">
@@ -77,7 +79,11 @@ const MyPostedJobs = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 ">
                   {data?.data.map((job) => (
-                    <JobPostedTableRow key={job._id} job={job} />
+                    <JobPostedTableRow
+                      fetchAllJobs={fetchAllJobs}
+                      key={job._id}
+                      job={job}
+                    />
                   ))}
                 </tbody>
               </table>
